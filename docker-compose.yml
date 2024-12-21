@@ -1,0 +1,21 @@
+services:
+  sso:
+    image: quay.io/keycloak/keycloak:25.0.5
+    ports:
+      - 8080:8080
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_ADMIN=admin
+    volumes:
+      - ./docker-dev-volumes/keycloak-data:/opt/keycloak/data/
+  client_laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile-client_laravel
+    tty: true
+    ports:
+      - 81:80
+    volumes:
+      - ./client_laravel:/var/www/
+      - ./client_laravel/public:/var/www/html
